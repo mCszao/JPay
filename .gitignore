@@ -1,8 +1,5 @@
 # Maven
 target/
-mvnw
-mvnw.cmd
-.mvn/
 !.mvn/wrapper/maven-wrapper.jar
 .mvn/wrapper/maven-wrapper.properties
 .mvn/wrapper/MavenWrapperDownloader.java
