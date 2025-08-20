@@ -1,7 +1,5 @@
 package com.challenge.JPay.config;
-import com.challenge.JPay.exception.GlobalErrorResponse;
-import com.challenge.JPay.exception.ResourceDuplicateException;
-import com.challenge.JPay.exception.ResourceNotFoundException;
+import com.challenge.JPay.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,8 +33,8 @@ public class GlobalCustomExceptionHandler {
                 .message("Entrada de dados inválida")
                 .validationErrors(errors)
                 .build();
-
         log.warn("Errors: {}", errors);
+
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
@@ -44,12 +42,12 @@ public class GlobalCustomExceptionHandler {
     public ResponseEntity<GlobalErrorResponse> handleResourceDuplicateException(ResourceDuplicateException ex) {
         GlobalErrorResponse errorResponse = GlobalErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
-                .status(HttpStatus.NOT_FOUND.value())
+                .status(HttpStatus.CONFLICT.value())
                 .error("Recurso não encontrado")
                 .message(ex.getMessage())
                 .build();
-
         log.warn("Resource duplicate: {}", ex.getMessage());
+
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
@@ -61,9 +59,50 @@ public class GlobalCustomExceptionHandler {
                 .error("Recurso não encontrado")
                 .message(ex.getMessage())
                 .build();
-
         log.warn("Resource not found: {}", ex.getMessage());
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<GlobalErrorResponse> handleCategoyNotFoundException(CategoryNotFoundException ex) {
+        GlobalErrorResponse errorResponse = GlobalErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error("Recurso não encontrado")
+                .message(ex.getMessage())
+                .build();
+
+        log.warn("Category not found: {}", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(AccountPayableNotFoundException.class)
+    public ResponseEntity<GlobalErrorResponse> handleCategoyNotFoundException(AccountPayableNotFoundException ex) {
+        GlobalErrorResponse errorResponse = GlobalErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error("Recurso não encontrado")
+                .message(ex.getMessage())
+                .build();
+
+        log.warn("Category not found: {}", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<GlobalErrorResponse> handleBusinessException(BusinessException ex) {
+        GlobalErrorResponse errorResponse = GlobalErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error("Regra de negócio não atendida")
+                .message(ex.getMessage())
+                .build();
+        log.warn("Business exception: {}", ex.getMessage());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
 
@@ -75,8 +114,8 @@ public class GlobalCustomExceptionHandler {
                 .error("Internal Server Error")
                 .message("An unexpected error occurred")
                 .build();
-
         log.error("ERRO INTERNO INESPERADO: ", ex);
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 }
