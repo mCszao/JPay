@@ -1,5 +1,6 @@
 package com.challenge.JPay.config;
 import com.challenge.JPay.exception.GlobalErrorResponse;
+import com.challenge.JPay.exception.ResourceDuplicateException;
 import com.challenge.JPay.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -35,8 +36,21 @@ public class GlobalCustomExceptionHandler {
                 .validationErrors(errors)
                 .build();
 
-        log.warn("Erros: {}", errors);
+        log.warn("Errors: {}", errors);
         return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(ResourceDuplicateException.class)
+    public ResponseEntity<GlobalErrorResponse> handleResourceDuplicateException(ResourceDuplicateException ex) {
+        GlobalErrorResponse errorResponse = GlobalErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error("Recurso não encontrado")
+                .message(ex.getMessage())
+                .build();
+
+        log.warn("Resource duplicate: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -48,7 +62,7 @@ public class GlobalCustomExceptionHandler {
                 .message(ex.getMessage())
                 .build();
 
-        log.warn("Recurso não encontrado: {}", ex.getMessage());
+        log.warn("Resource not found: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
