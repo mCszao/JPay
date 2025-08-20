@@ -63,7 +63,11 @@ public class AccountPayable {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public void markAsPais() {
+    public boolean isExpired() {
+        return status == Status.PENDENTE && expirationDate.isBefore(LocalDate.now());
+    }
+
+    public void markAsPaid() {
         this.status = Status.PAGO;
         this.paymentDate = LocalDate.now();
     }
