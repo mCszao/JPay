@@ -26,7 +26,7 @@ public class FinancialTransaction {
     private BankAccount bankAccount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
+    @JoinColumn(name = "account_payable_id")
     private AccountPayable accountPayable;
 
     @Enumerated(EnumType.STRING)
