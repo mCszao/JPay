@@ -158,8 +158,7 @@ public class AccountPayableController {
 
         var newDto = PaymentRequestDTO.builder()
                 .accountId(id)
-                .bankAccountId(dto.bankAccountId())
-                .type(dto.type());
+                .bankAccountId(dto.bankAccountId());
         var paidAccount = accountService.payAccount(dto);
         return ResponseEntity.ok(paidAccount);
     }

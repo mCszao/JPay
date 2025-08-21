@@ -1,5 +1,6 @@
 package com.challenge.JPay.dto.request;
 
+import com.challenge.JPay.model.enums.TransactionType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 
@@ -27,5 +28,8 @@ public record AccountPayableRequestDTO(
 
     @NotNull(message = "A conta bancária é obrigatória")
     @Positive(message = "O id da conta bancária não atende os requisitos")
-    Long bankAccountId
+    Long bankAccountId,
+
+    @NotEmpty(message = "O tipo da transação é obrigatório")
+    TransactionType type
 ) { }

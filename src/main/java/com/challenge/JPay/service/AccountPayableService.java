@@ -8,7 +8,6 @@ import com.challenge.JPay.dto.response.CategoryResponseDTO;
 import com.challenge.JPay.exception.*;
 import com.challenge.JPay.model.AccountPayable;
 import com.challenge.JPay.model.BankAccount;
-import com.challenge.JPay.model.FinancialTransaction;
 import com.challenge.JPay.model.enums.Status;
 import com.challenge.JPay.repository.AccountPayableRepository;
 import com.challenge.JPay.repository.BankAccountRepository;
@@ -20,8 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -32,7 +31,6 @@ public class AccountPayableService {
     private final AccountPayableRepository accountRepository;
     private final CategoryRepository categoryRepository;
     private final BankAccountRepository bankAccountRepository;
-    private final FinancialTransactionService transactionService;
 
     public Page<AccountPayableResponseDTO> findAll(Pageable pageable) {
         log.info("Finding all accounts with pagination: {}", pageable);
@@ -92,6 +90,7 @@ public class AccountPayableService {
                 .description(dto.description())
                 .amount(dto.amount())
                 .expirationDate(dto.expirationDate())
+                .transactionType(dto.type())
                 .status(Status.PENDENTE)
                 .category(category)
                 .bankAccount(bankAccount)
@@ -142,14 +141,12 @@ public class AccountPayableService {
         BankAccount bankAccount = bankAccountRepository.findById(dto.bankAccountId())
                 .orElseThrow(() -> new BankAccountNotFoundException(dto.bankAccountId()));
 
-
-        if (bankAccount.getCurrentBalance().compareTo(account.getAmount()) < 0) {
-            throw new BusinessException("Saldo insuficiente para pagar essa conta");
-        }
-
-        transactionService.processPayment(account, bankAccount, dto);
-
+        BigDecimal currentBalance = bankAccount.getCurrentBalance();
+        BigDecimal newBalance = currentBalance.subtract(account.getAmount());
         account.markAsPaid();
+
+        bankAccount.setCurrentBalance(newBalance);
+        bankAccountRepository.save(bankAccount);
         var paidAccount = accountRepository.save(account);
         log.info("Account paid successfully with id: {}", paidAccount.getId());
 
@@ -162,13 +159,6 @@ public class AccountPayableService {
 
         var account = accountRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Account not found with id: " + id));
-        
-        var transactions = account.getTransactions();
-        if(!transactions.isEmpty()) {
-            for (FinancialTransaction transaction : transactions) {
-                transactionService.delete(transaction);
-            }
-        }
 
         accountRepository.delete(account);
         log.info("Account deleted successfully with id: {}", id);
@@ -182,6 +172,7 @@ public class AccountPayableService {
                 .expirationDate(account.getExpirationDate())
                 .paymentDate(account.getPaymentDate())
                 .status(account.getStatus())
+                .type(account.getTransactionType())
                 .isExpired(account.isExpired())
                 .category(CategoryResponseDTO.builder()
                         .id(account.getCategory().getId())

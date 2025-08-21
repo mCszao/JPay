@@ -136,9 +136,8 @@ public class BankAccountService {
                 .orElseThrow(() -> new BankAccountNotFoundException(id));
 
         long accountsCount = bankAccountRepository.countAccountsByBankAccount(id);
-        long transactionsCount = bankAccountRepository.countTransactionsByBankAccount(id);
 
-        if (accountsCount > 0 || transactionsCount > 0) {
+        if (accountsCount > 0) {
             throw new BusinessException("Não é possível deletar a conta bancária pois ela possúi contas a pagar pendentes e/ou transaões vinculadas, tente desativar");
         }
 

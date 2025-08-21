@@ -27,7 +27,4 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Long> 
 
     @Query("SELECT COUNT(a) FROM AccountPayable a WHERE a.bankAccount.id = :bankAccountId")
     long countAccountsByBankAccount(@Param("bankAccountId") Long bankAccountId);
-
-    @Query("SELECT COUNT(t) FROM FinancialTransaction t WHERE t.bankAccount.id = :bankAccountId")
-    long countTransactionsByBankAccount(@Param("bankAccountId") Long bankAccountId);
 }

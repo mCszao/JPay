@@ -1,6 +1,7 @@
 package com.challenge.JPay.model;
 
 import com.challenge.JPay.model.enums.Status;
+import com.challenge.JPay.model.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -40,6 +41,10 @@ public class AccountPayable {
     @Column(nullable = false, length = 30)
     private Status status = Status.PENDENTE;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TransactionType transactionType;
+
     @Column(name = "payment_date")
     private LocalDate paymentDate;
 
@@ -50,10 +55,6 @@ public class AccountPayable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_account_id", nullable = false)
     private BankAccount bankAccount;
-
-    @OneToMany(mappedBy = "accountPayable", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @Builder.Default
-    private List<FinancialTransaction> transactions = new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
