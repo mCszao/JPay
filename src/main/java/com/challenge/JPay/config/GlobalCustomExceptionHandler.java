@@ -87,7 +87,7 @@ public class GlobalCustomExceptionHandler {
                 .message(ex.getMessage())
                 .build();
 
-        log.warn("Category not found: {}", ex.getMessage());
+        log.warn("Account not found: {}", ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
