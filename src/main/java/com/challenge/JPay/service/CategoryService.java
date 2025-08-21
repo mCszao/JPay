@@ -41,7 +41,7 @@ public class CategoryService {
         log.info("Finding category by id: {}", id);
 
         Category category = repository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException(id.toString()));
+                .orElseThrow(() -> new CategoryNotFoundException(id));
         return toResponseDTO(category);
     }
 
@@ -71,7 +71,7 @@ public class CategoryService {
         log.info("Updating category with id: {}", id);
 
         Category category = repository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException(id.toString()));
+                .orElseThrow(() -> new CategoryNotFoundException(id));
 
         if (!category.getName().equalsIgnoreCase(dto.name()) &&
                 repository.existsByNameIgnoreCase(dto.name())) {
@@ -92,7 +92,7 @@ public class CategoryService {
         log.info("Deactivating category with id: {}", id);
 
         Category category = repository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException(id.toString()));
+                .orElseThrow(() -> new CategoryNotFoundException(id));
 
 
         long pendingAccountsCount = repository.countPendingAccountsByCategory(id);
@@ -110,7 +110,7 @@ public class CategoryService {
         log.info("Deleting category with id: {}", id);
 
         Category category = repository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException(id.toString()));
+                .orElseThrow(() -> new CategoryNotFoundException(id));
 
         long accountsCount = repository.countAccountsByCategory(id);
         if (accountsCount > 0) {

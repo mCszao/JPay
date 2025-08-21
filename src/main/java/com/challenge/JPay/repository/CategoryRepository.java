@@ -19,9 +19,9 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Page<Category> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
-    @Query("SELECT COUNT(a) FROM Account a WHERE a.category.id = :categoryId AND a.status = 'PENDING'")
+    @Query("SELECT COUNT(a) FROM AccountPayable a WHERE a.category.id = :categoryId AND a.status = 'PENDING'")
     long countPendingAccountsByCategory(@Param("categoryId") Long categoryId);
 
-    @Query("SELECT COUNT(a) FROM Account a WHERE a.category.id = :categoryId")
+    @Query("SELECT COUNT(a) FROM AccountPayable a WHERE a.category.id = :categoryId")
     long countAccountsByCategory(@Param("categoryId") Long categoryId);
 }
