@@ -49,7 +49,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Pesquisar categoria por ID", description = "Retrieve a specific category by its ID")
+    @Operation(summary = "Pesquisar categoria por ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Categoria retornada"),
             @ApiResponse(responseCode = "404", description = "Categoria não encontrada")
@@ -115,11 +115,11 @@ public class CategoryController {
     }
 
     @PatchMapping("/{id}/deactivate")
-    @Operation(summary = "Deactivate category", description = "Deactivate a category (soft delete)")
+    @Operation(summary = "Desativar categoria", description = "(soft delete)")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Category deactivated successfully"),
-            @ApiResponse(responseCode = "404", description = "Category not found"),
-            @ApiResponse(responseCode = "400", description = "Cannot deactivate category with pending accounts")
+            @ApiResponse(responseCode = "204", description = "Categoria desativada com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Categoria não encontrada"),
+            @ApiResponse(responseCode = "400", description = "Não é possível desabilitar uma categoria com contas pendentes")
     })
     public ResponseEntity<Void> deactivateCategory(
             @Parameter(description = "Category ID", required = true)
@@ -131,7 +131,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete category", description = "Permanently delete a category")
+    @Operation(summary = "Deletar categoria")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Category deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Category not found"),
