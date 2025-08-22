@@ -47,10 +47,10 @@ public class BankAccountController {
     @GetMapping("/active")
     @Operation(summary = "Listar contas bancárias ativas")
     @ApiResponse(responseCode = "200", description = "Contas bancárias ativas recuperadas com sucesso")
-    public ResponseEntity<Page<BankAccountResponseDTO>> getAllActiveBankAccounts(@PageableDefault(size = 20, sort = "name") Pageable pageable) {
-        log.info("GET /api/bank-accounts/active - Finding all active bank accounts with pagination: {}", pageable);
+    public ResponseEntity<List<BankAccountResponseDTO>> getAllActiveBankAccounts() {
+        log.info("GET /api/bank-accounts/active - Finding all active bank accounts without pagination");
 
-        var bankAccounts = bankAccountService.findAllActive(pageable);
+        var bankAccounts = bankAccountService.findAllActive();
         return ResponseEntity.ok(bankAccounts);
     }
 

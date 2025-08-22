@@ -15,7 +15,7 @@ import java.util.Optional;
 @Repository
 public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
 
-    Page<BankAccount> findByActiveTrue(Pageable pageable);
+    List<BankAccount> findByActiveTrue();
 
     Page<BankAccount> findByBankContainingIgnoreCase(String bank, Pageable pageable);
 

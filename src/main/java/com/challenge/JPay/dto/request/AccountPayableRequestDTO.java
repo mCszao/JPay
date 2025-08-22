@@ -31,5 +31,6 @@ public record AccountPayableRequestDTO(
     Long bankAccountId,
 
     @NotEmpty(message = "O tipo da transação é obrigatório")
-    String type
+    String type,
+    String status
 ) { }

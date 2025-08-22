@@ -69,7 +69,10 @@ public class AccountPayable {
     }
 
     public void markAsPaid() {
-        this.status = Status.PAID;
+        this.status = this.status.equals(Status.PAID) ? Status.PENDING: Status.PAID;
+        if(this.status.equals(Status.PENDING)) {
+            this.paymentDate = null;
+        }
         this.paymentDate = LocalDate.now();
     }
 }

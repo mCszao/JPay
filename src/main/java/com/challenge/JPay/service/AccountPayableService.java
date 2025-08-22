@@ -92,7 +92,7 @@ public class AccountPayableService {
                 .amount(dto.amount())
                 .expirationDate(dto.expirationDate())
                 .transactionType(Enum.valueOf(TransactionType.class,dto.type()))
-                .status(Status.PENDING)
+                .status(dto.status() == null ? Status.PENDING : Enum.valueOf(Status.class, dto.status()))
                 .category(category)
                 .bankAccount(bankAccount)
                 .build();
@@ -122,6 +122,8 @@ public class AccountPayableService {
 
         account.setDescription(dto.description());
         account.setAmount(dto.amount());
+        account.setTransactionType(Enum.valueOf(TransactionType.class, dto.type()));
+        account.setStatus(Enum.valueOf(Status.class, dto.status()));
         account.setExpirationDate(dto.expirationDate());
         account.setCategory(category);
         account.setBankAccount(bankAccount);
@@ -142,6 +144,27 @@ public class AccountPayableService {
         BankAccount bankAccount = bankAccountRepository.findById(dto.bankAccountId())
                 .orElseThrow(() -> new BankAccountNotFoundException(dto.bankAccountId()));
 
+        BigDecimal currentBalance = bankAccount.getCurrentBalance();
+        BigDecimal newBalance = currentBalance.subtract(account.getAmount());
+        account.markAsPaid();
+
+        bankAccount.setCurrentBalance(newBalance);
+        bankAccountRepository.save(bankAccount);
+        var paidAccount = accountRepository.save(account);
+        log.info("Account paid successfully with id: {}", paidAccount.getId());
+
+        return toResponseDTO(paidAccount);
+    }
+
+    @Transactional
+    public AccountPayableResponseDTO payAccount(Long id) {
+        log.info("Processing payment for account id: {}",id);
+
+        var account = accountRepository.findById(id)
+                .orElseThrow(() -> new AccountPayableNotFoundException(id));
+
+        var bankAccount = bankAccountRepository.findById(account.getBankAccount().getId())
+                .orElseThrow(() -> new BankAccountNotFoundException(id));
         BigDecimal currentBalance = bankAccount.getCurrentBalance();
         BigDecimal newBalance = currentBalance.subtract(account.getAmount());
         account.markAsPaid();

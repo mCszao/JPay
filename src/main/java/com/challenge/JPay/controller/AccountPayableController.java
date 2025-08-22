@@ -39,7 +39,7 @@ public class AccountPayableController {
             @ApiResponse(responseCode = "400", description = "Parâmetros de paginação inválidos")
     })
     public ResponseEntity<Page<AccountPayableResponseDTO>> getAllAccounts(
-            @PageableDefault(size = 20, sort = "expirationDate", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(size = 20, sort = "expirationDate", direction = Sort.Direction.ASC) Pageable pageable) {
         log.info("GET /api/accounts-payable - Finding accounts with pagination: {}", pageable);
 
         var accounts = accountService.findAll(pageable);
@@ -152,15 +152,10 @@ public class AccountPayableController {
     })
     public ResponseEntity<AccountPayableResponseDTO> payAccountById(
             @Parameter(description = "ID da conta", required = true)
-            @PathVariable Long id,
-            @Parameter(description = "Dados do pagamento", required = true)
-            @Valid @RequestBody PaymentRequestDTO dto) {
+            @PathVariable Long id) {
         log.info("POST /api/accounts-payable/{}/pay - Paying account by id", id);
 
-        var newDto = PaymentRequestDTO.builder()
-                .accountId(id)
-                .bankAccountId(dto.bankAccountId());
-        var paidAccount = accountService.payAccount(dto);
+        var paidAccount = accountService.payAccount(id);
         return ResponseEntity.ok(paidAccount);
     }
 

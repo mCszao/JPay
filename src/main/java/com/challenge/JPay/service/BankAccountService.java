@@ -31,11 +31,11 @@ public class BankAccountService {
                 .map(this::toResponseDTO);
     }
 
-    public Page<BankAccountResponseDTO> findAllActive(Pageable pageable) {
+    public List<BankAccountResponseDTO> findAllActive() {
         log.info("Finding all active bank accounts");
 
-        return bankAccountRepository.findByActiveTrue(pageable)
-                .map(this::toResponseDTO);
+        return bankAccountRepository.findByActiveTrue()
+                .stream().map(this::toResponseDTO).toList();
     }
 
     public BankAccountResponseDTO findById(Long id) {
@@ -84,7 +84,7 @@ public class BankAccountService {
                 .orElseThrow(() -> new BankAccountNotFoundException(id));
 
         bankAccount.setName(dto.name());
-        bankAccount.setBank(dto.name());
+        bankAccount.setBank(dto.bank());
         bankAccount.setCurrentBalance(dto.currentBalance());
 
         BankAccount updatedBankAccount = bankAccountRepository.save(bankAccount);
