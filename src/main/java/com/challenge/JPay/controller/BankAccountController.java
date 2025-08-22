@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/bank-accounts")
 @RequiredArgsConstructor
-@Tag(name = "Bank Accounts", description = "Operações de gerenciamento de contas bancárias")
+@Tag(name = "Contas Bancárias", description = "Operações de gerenciamento de contas bancárias")
 public class BankAccountController {
 
     private final BankAccountService bankAccountService;

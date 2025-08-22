@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/accounts-payable")
 @RequiredArgsConstructor
-@Tag(name = "Accounts", description = "Operações de gerenciamento de contas a pagar")
+@Tag(name = "Contas a Pagar", description = "Operações de gerenciamento de contas a pagar")
 public class AccountPayableController {
 
     private final AccountPayableService accountService;
@@ -67,7 +67,7 @@ public class AccountPayableController {
             @ApiResponse(responseCode = "400", description = "Status inválido ou parâmetros de paginação inválidos")
     })
     public ResponseEntity<Page<AccountPayableResponseDTO>> getAccountsByStatus(
-            @Parameter(description = "Status da conta (PENDENTE, PAGO)", required = true)
+            @Parameter(description = "Status da conta (PENDING, PAID)", required = true)
             @PathVariable String status,
             @PageableDefault(size = 20, sort = "expirationDate") Pageable pageable) {
         log.info("GET /api/accounts-payable/status/{} - Finding accounts by status: {}", status, pageable);
