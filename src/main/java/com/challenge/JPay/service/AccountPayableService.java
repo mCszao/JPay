@@ -9,6 +9,7 @@ import com.challenge.JPay.exception.*;
 import com.challenge.JPay.model.AccountPayable;
 import com.challenge.JPay.model.BankAccount;
 import com.challenge.JPay.model.enums.Status;
+import com.challenge.JPay.model.enums.TransactionType;
 import com.challenge.JPay.repository.AccountPayableRepository;
 import com.challenge.JPay.repository.BankAccountRepository;
 import com.challenge.JPay.repository.CategoryRepository;
@@ -90,8 +91,8 @@ public class AccountPayableService {
                 .description(dto.description())
                 .amount(dto.amount())
                 .expirationDate(dto.expirationDate())
-                .transactionType(dto.type())
-                .status(Status.PENDENTE)
+                .transactionType(Enum.valueOf(TransactionType.class,dto.type()))
+                .status(Status.PENDING)
                 .category(category)
                 .bankAccount(bankAccount)
                 .build();
@@ -109,7 +110,7 @@ public class AccountPayableService {
         var account = accountRepository.findById(id)
                 .orElseThrow(() -> new AccountPayableNotFoundException(id));
 
-        if (account.getStatus() == Status.PAGO) {
+        if (account.getStatus() == Status.PAID) {
             throw new BusinessException("Não é possível modificar uma conta depois de paga");
         }
 

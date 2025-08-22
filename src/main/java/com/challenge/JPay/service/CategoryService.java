@@ -100,9 +100,9 @@ public class CategoryService {
             throw new BusinessException("Não é possivel desativar a categoria pois ela possuí" + pendingAccountsCount + " contas pendentes");
         }
 
-        category.setActive(false);
+        category.setActive(!category.getActive());
         repository.save(category);
-        log.info("Category deactivated successfully with id: {}", id);
+        log.info("Category active status change with successfully with id: {}", id);
     }
 
     @Transactional

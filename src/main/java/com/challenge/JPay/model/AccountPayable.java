@@ -39,7 +39,7 @@ public class AccountPayable {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     @Column(nullable = false, length = 30)
-    private Status status = Status.PENDENTE;
+    private Status status = Status.PENDING;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -65,11 +65,11 @@ public class AccountPayable {
     private LocalDateTime updatedAt;
 
     public boolean isExpired() {
-        return status == Status.PENDENTE && expirationDate.isBefore(LocalDate.now());
+        return status == Status.PENDING && expirationDate.isBefore(LocalDate.now());
     }
 
     public void markAsPaid() {
-        this.status = Status.PAGO;
+        this.status = Status.PAID;
         this.paymentDate = LocalDate.now();
     }
 }
