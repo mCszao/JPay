@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class AccountPayableController {
             @ApiResponse(responseCode = "400", description = "Parâmetros de paginação inválidos")
     })
     public ResponseEntity<Page<AccountPayableResponseDTO>> getAllAccounts(
-            @PageableDefault(size = 20, sort = "dueDate") Pageable pageable) {
+            @PageableDefault(size = 20, sort = "expirationDate", direction = Sort.Direction.DESC) Pageable pageable) {
         log.info("GET /api/accounts-payable - Finding accounts with pagination: {}", pageable);
 
         var accounts = accountService.findAll(pageable);
