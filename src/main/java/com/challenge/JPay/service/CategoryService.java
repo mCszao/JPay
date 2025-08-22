@@ -2,6 +2,7 @@ package com.challenge.JPay.service;
 
 import com.challenge.JPay.dto.request.CategoryRequestDTO;
 import com.challenge.JPay.dto.response.CategoryResponseDTO;
+import com.challenge.JPay.dto.response.CategoryTotalsResponseDTO;
 import com.challenge.JPay.exception.BusinessException;
 import com.challenge.JPay.exception.CategoryNotFoundException;
 import com.challenge.JPay.exception.ResourceDuplicateException;
@@ -32,11 +33,27 @@ public class CategoryService {
                 .map(this::toResponseDTO);
     }
 
+    public CategoryResponseDTO findMostUsedCategory() {
+        log.info("Finding most used category");
+
+        return toResponseDTO(repository.getMostUsedCategory());
+    }
+
     public List<CategoryResponseDTO> findAllActive() {
         log.info("Finding all active categories");
 
         return repository.findByActiveTrue()
                 .stream().map(this::toResponseDTO).toList();
+    }
+
+    public List<CategoryTotalsResponseDTO> findTotalAmountByCategory() {
+        log.info("Finding totals categories");
+
+        return repository.getCategorieTotals().stream().map((c) -> CategoryTotalsResponseDTO.builder()
+                .value(c.getTotalAmount())
+                .id(c.getCategory().getId())
+                .name(c.getCategory().getName())
+                .build()).toList();
     }
 
     public CategoryResponseDTO findById(Long id) {

@@ -2,6 +2,7 @@ package com.challenge.JPay.controller;
 
 import com.challenge.JPay.dto.request.CategoryRequestDTO;
 import com.challenge.JPay.dto.response.CategoryResponseDTO;
+import com.challenge.JPay.dto.response.CategoryTotalsResponseDTO;
 import com.challenge.JPay.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -40,13 +41,33 @@ public class CategoryController {
         return ResponseEntity.ok(categories);
     }
 
+    @GetMapping("/most-used")
+    @Operation(summary = "Pesquisar categoria mais utilizada ")
+    @ApiResponse(responseCode = "200", description = "Categoria mais utilizada retornada com sucesso")
+    public ResponseEntity<CategoryResponseDTO> getMostUsedCategory() {
+        log.info("GET /api/categories/active - Finding most used category without pagination");
+
+        var categoriy = service.findMostUsedCategory();
+        return ResponseEntity.ok(categoriy);
+    }
+
     @GetMapping("/active")
     @Operation(summary = "Pesquisar todas categorias ativas ")
     @ApiResponse(responseCode = "200", description = "Categorias ativas retornadas com sucesso")
     public ResponseEntity<List<CategoryResponseDTO>> getAllActiveCategories() {
-        log.info("GET /api/categories/active - Finding all active categories without pagination: {}");
+        log.info("GET /api/categories/active - Finding all active categories without pagination");
 
         var categories = service.findAllActive();
+        return ResponseEntity.ok(categories);
+    }
+
+    @GetMapping("/total")
+    @Operation(summary = "Pesquisar o total por categoria ")
+    @ApiResponse(responseCode = "200", description = "Totais por categorias retornados com sucesso")
+    public ResponseEntity<List<CategoryTotalsResponseDTO>> getTotalAmountByCategory() {
+        log.info("GET /api/categories/active - Finding total amount by category without pagination");
+
+        var categories = service.findTotalAmountByCategory();
         return ResponseEntity.ok(categories);
     }
 
