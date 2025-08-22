@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     boolean existsByNameIgnoreCase(String name);
 
-    Page<Category> findByActiveTrue(Pageable pageable);
+    List<Category> findByActiveTrue();
 
     Page<Category> findByNameContainingIgnoreCase(String name, Pageable pageable);
 

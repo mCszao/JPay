@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -30,11 +32,11 @@ public class CategoryService {
                 .map(this::toResponseDTO);
     }
 
-    public Page<CategoryResponseDTO> findAllActive(Pageable pageable) {
+    public List<CategoryResponseDTO> findAllActive() {
         log.info("Finding all active categories");
 
-        return repository.findByActiveTrue(pageable)
-                .map(this::toResponseDTO);
+        return repository.findByActiveTrue()
+                .stream().map(this::toResponseDTO).toList();
     }
 
     public CategoryResponseDTO findById(Long id) {

@@ -18,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/categories")
@@ -39,12 +41,12 @@ public class CategoryController {
     }
 
     @GetMapping("/active")
-    @Operation(summary = "Pesquisar todas categorias ativas com paginação")
+    @Operation(summary = "Pesquisar todas categorias ativas ")
     @ApiResponse(responseCode = "200", description = "Categorias ativas retornadas com sucesso")
-    public ResponseEntity<Page<CategoryResponseDTO>> getAllActiveCategories(@PageableDefault(size = 20, sort = "name") Pageable pageable) {
-        log.info("GET /api/categories/active - Finding all active categories with pagination: {}", pageable);
+    public ResponseEntity<List<CategoryResponseDTO>> getAllActiveCategories() {
+        log.info("GET /api/categories/active - Finding all active categories without pagination: {}");
 
-        Page<CategoryResponseDTO> categories = service.findAllActive(pageable);
+        var categories = service.findAllActive();
         return ResponseEntity.ok(categories);
     }
 
