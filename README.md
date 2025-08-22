@@ -24,7 +24,6 @@ Ele é responsável por expor as APIs REST, permitindo o gerenciamento de **cont
 1. Clone este repositório:
    ```bash
    git clone https://github.com/mCszao/JPay.git
-````
 
 2. Acesse a pasta do projeto:
 
