@@ -69,6 +69,12 @@ public class AccountPayableService {
                 .map(this::toResponseDTO);
     }
 
+    public Page<AccountPayableResponseDTO> findByExpirationDateBetweenAndType(LocalDate startDate, LocalDate endDate, String type, Pageable pageable) {
+        log.info("Finding accounts by expiration date date between {} and {} and type {} with pagination: {}", startDate, endDate, type, pageable);
+
+        return accountRepository.findByExpirationDateBetweenAndType(startDate, endDate, Enum.valueOf(TransactionType.class, type), pageable).map(this::toResponseDTO);
+    }
+
     @Transactional
     public AccountPayableResponseDTO create(AccountPayableRequestDTO dto) {
         log.info("Creating new account: {}", dto.description());

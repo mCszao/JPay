@@ -2,6 +2,7 @@ package com.challenge.JPay.repository;
 
 import com.challenge.JPay.model.AccountPayable;
 import com.challenge.JPay.model.enums.Status;
+import com.challenge.JPay.model.enums.TransactionType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,4 +21,7 @@ public interface AccountPayableRepository extends JpaRepository<AccountPayable, 
     Page<AccountPayable> findOverdueAccounts(@Param("currentDate") LocalDate currentDate, Pageable pageable);
 
     Page<AccountPayable> findByExpirationDateBetween(LocalDate startDate, LocalDate endDate, Pageable pageable);
+
+    @Query("SELECT a FROM AccountPayable a WHERE a.expirationDate BETWEEN :startDate AND :endDate AND a.transactionType = :type")
+    Page<AccountPayable> findByExpirationDateBetweenAndType(LocalDate startDate, LocalDate endDate, TransactionType type, Pageable pageable);
 }

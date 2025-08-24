@@ -4,6 +4,7 @@ import com.challenge.JPay.dto.request.AccountPayableRequestDTO;
 import com.challenge.JPay.dto.request.PaymentRequestDTO;
 import com.challenge.JPay.dto.response.AccountPayableResponseDTO;
 import com.challenge.JPay.model.enums.Status;
+import com.challenge.JPay.model.enums.TransactionType;
 import com.challenge.JPay.service.AccountPayableService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -106,7 +107,30 @@ public class AccountPayableController {
         log.info("GET /api/accounts-payable/due-date-range - Finding accounts by expiration date between: {} to {} with pagination: {}",
                 startDate, endDate, pageable);
 
+
         var accounts = accountService.findByExpirationDateBetween(startDate, endDate, pageable);
+        return ResponseEntity.ok(accounts);
+    }
+
+    @GetMapping("/due-date-range-type")
+    @Operation(summary = "Listar contas por intervalo de vencimento", description = "Buscar contas por intervalo de data de vencimento com paginação")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Contas encontradas"),
+            @ApiResponse(responseCode = "400", description = "Datas inválidas ou parâmetros de paginação inválidos")
+    })
+    public ResponseEntity<Page<AccountPayableResponseDTO>> getAccountsByExpirationDateRangeAndType(
+            @Parameter(description = "Data de início do intervalo", required = true)
+            @RequestParam LocalDate startDate,
+            @Parameter(description = "Data de fim do intervalo", required = true)
+            @RequestParam LocalDate endDate,
+            @Parameter(description = "Tipo das contas a serem filtradas", required = false)
+            @RequestParam String type,
+            @PageableDefault(size = 20, sort = "expirationDate") Pageable pageable) {
+        log.info("GET /api/accounts-payable/due-date-range - Finding accounts by expiration date between: {} to {} and type {} with pagination: {}",
+                startDate, endDate, type, pageable);
+
+
+        var accounts = accountService.findByExpirationDateBetweenAndType(startDate, endDate, type, pageable);
         return ResponseEntity.ok(accounts);
     }
 
