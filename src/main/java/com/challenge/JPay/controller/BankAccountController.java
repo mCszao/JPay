@@ -158,7 +158,7 @@ public class BankAccountController {
     public ResponseEntity<Void> deactivateBankAccount(
             @Parameter(description = "ID da conta bancária", required = true)
             @PathVariable Long id) {
-        log.info("PATCH /api/bank-accounts/{}/deactivate - Deactivate bank account", id);
+        log.info("PATCH /api/bank-accounts/{}/deactivate - Deactivate/activate bank account", id);
 
         bankAccountService.deactivate(id);
         return ResponseEntity.noContent().build();

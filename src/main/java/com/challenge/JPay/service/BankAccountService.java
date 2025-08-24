@@ -113,7 +113,7 @@ public class BankAccountService {
 
     @Transactional
     public void deactivate(Long id) {
-        log.info("Deactivating bank account with id: {}", id);
+        log.info("Deactivating/activating bank account with id: {}", id);
 
         BankAccount bankAccount = bankAccountRepository.findById(id)
                 .orElseThrow(() -> new BankAccountNotFoundException(id));
@@ -123,7 +123,7 @@ public class BankAccountService {
             throw new BusinessException("Não pode desativar a conta bancária, pois ela tem " + pendingAccountsCount + " contas pendentes");
         }
 
-        bankAccount.setActive(false);
+        bankAccount.setActive(!bankAccount.getActive());
         bankAccountRepository.save(bankAccount);
         log.info("Bank account deactivated successfully with id: {}", id);
     }
