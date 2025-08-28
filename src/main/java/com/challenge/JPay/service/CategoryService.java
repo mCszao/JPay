@@ -8,6 +8,7 @@ import com.challenge.JPay.exception.CategoryNotFoundException;
 import com.challenge.JPay.exception.ResourceDuplicateException;
 import com.challenge.JPay.exception.ResourceNotFoundException;
 import com.challenge.JPay.model.Category;
+import com.challenge.JPay.repository.AccountPayableRepository;
 import com.challenge.JPay.repository.CategoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository repository;
+    @Autowired
+    private AccountPayableRepository accountPayableRepository;
 
     public Page<CategoryResponseDTO> findAll(Pageable pageable) {
         log.info("Finding all categories with pagination: {}", pageable);
@@ -36,6 +39,10 @@ public class CategoryService {
     public CategoryResponseDTO findMostUsedCategory() {
         log.info("Finding most used category");
 
+        if(accountPayableRepository.findAll().isEmpty()) {
+            throw new BusinessException("Sem lançamentos cadastrados");
+        }
+        
         return toResponseDTO(repository.getMostUsedCategory());
     }
 
