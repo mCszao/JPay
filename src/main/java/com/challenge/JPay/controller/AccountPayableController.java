@@ -3,6 +3,7 @@ package com.challenge.JPay.controller;
 import com.challenge.JPay.dto.request.AccountPayableRequestDTO;
 import com.challenge.JPay.dto.request.PaymentRequestDTO;
 import com.challenge.JPay.dto.response.AccountPayableResponseDTO;
+import com.challenge.JPay.dto.response.BankAccountResponseDTO;
 import com.challenge.JPay.model.enums.Status;
 import com.challenge.JPay.model.enums.TransactionType;
 import com.challenge.JPay.service.AccountPayableService;
@@ -22,7 +23,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-        import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -132,6 +135,19 @@ public class AccountPayableController {
 
         var accounts = accountService.findByExpirationDateBetweenAndType(startDate, endDate, type, pageable);
         return ResponseEntity.ok(accounts);
+    }
+
+    @GetMapping("/total-amount")
+    @Operation(summary = "Retorna o total dos lançamentos por tipo")
+    @ApiResponse(responseCode = "200", description = "Total retornado com sucesso")
+    public ResponseEntity<BigDecimal> getTotalAmount(
+        @Parameter(description = "Tipo do lançamento", required = true)
+        @RequestParam String type
+    ) {
+        log.info("GET /api/total-amounte - Searching total amount by type");
+
+        var total = accountService.getTotalAmountByType(type);
+        return ResponseEntity.ok(total);
     }
 
     @PostMapping
