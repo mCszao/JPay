@@ -75,6 +75,12 @@ public class AccountPayableService {
         return accountRepository.findByExpirationDateBetweenAndType(startDate, endDate, Enum.valueOf(TransactionType.class, type), pageable).map(this::toResponseDTO);
     }
 
+    public BigDecimal getTotalAmountByType(String type) {
+        log.info("Calculating total amount by type: {}", type);
+
+        return accountRepository.getTotalAmountByType(Enum.valueOf(TransactionType.class, type));
+    }
+
     @Transactional
     public AccountPayableResponseDTO create(AccountPayableRequestDTO dto) {
         log.info("Creating new account: {}", dto.description());
