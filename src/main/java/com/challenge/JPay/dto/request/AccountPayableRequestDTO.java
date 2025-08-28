@@ -18,7 +18,6 @@ public record AccountPayableRequestDTO(
     BigDecimal amount,
 
     @NotNull(message = "A data de expiração é obrigatória")
-    @Future(message = "A data de expiração precisa ser uma data futura")
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate expirationDate,
 
