@@ -123,7 +123,7 @@ public class CategoryService {
 
         long pendingAccountsCount = repository.countPendingAccountsByCategory(id);
         if (pendingAccountsCount > 0) {
-            throw new BusinessException("Não é possivel desativar a categoria pois ela possuí" + pendingAccountsCount + " contas pendentes");
+            throw new BusinessException("Não é possivel desativar a categoria pois ela possuí " + pendingAccountsCount + " contas pendentes");
         }
 
         category.setActive(!category.getActive());
