@@ -23,21 +23,21 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Page<Category> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
-    @Query("SELECT COUNT(a) FROM AccountPayable a WHERE a.category.id = :categoryId AND a.status = 'PENDING'")
-    long countPendingAccountsByCategory(@Param("categoryId") Long categoryId);
+    @Query("SELECT COUNT(a) FROM Transaction a WHERE a.category.id = :categoryId AND a.status = 'PENDING'")
+    long countPendingTransactionsByCategory(@Param("categoryId") Long categoryId);
 
-    @Query("SELECT COUNT(a) FROM AccountPayable a WHERE a.category.id = :categoryId")
-    long countAccountsByCategory(@Param("categoryId") Long categoryId);
+    @Query("SELECT COUNT(a) FROM Transaction a WHERE a.category.id = :categoryId")
+    long countTransactionsByCategory(@Param("categoryId") Long categoryId);
 
-    @Query("SELECT c FROM AccountPayable a JOIN Category c ON c.id = a.category.id group by a.category.id order by COUNT(a) DESC LIMIT 1")
+    @Query("SELECT c FROM Transaction a JOIN Category c ON c.id = a.category.id group by a.category.id order by COUNT(a) DESC LIMIT 1")
     Category getMostUsedCategory();
 
     @Query("""
         SELECT c as category,
                SUM(a.amount) as totalAmount
-        FROM AccountPayable a
+        FROM Transaction a
         JOIN a.category c
-        WHERE a.category.active = true 
+        WHERE a.category.active = true
         AND a.transactionType = 'PASSIVO'
         GROUP BY c
     """)

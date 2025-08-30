@@ -47,8 +47,8 @@ public class CategoryController {
     public ResponseEntity<CategoryResponseDTO> getMostUsedCategory() {
         log.info("GET /api/categories/active - Finding most used category without pagination");
 
-        var categoriy = service.findMostUsedCategory();
-        return ResponseEntity.ok(categoriy);
+        var category = service.findMostUsedCategory();
+        return ResponseEntity.ok(category);
     }
 
     @GetMapping("/active")
@@ -142,7 +142,7 @@ public class CategoryController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Categoria desativada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Categoria não encontrada"),
-            @ApiResponse(responseCode = "400", description = "Não é possível desabilitar uma categoria com contas pendentes")
+            @ApiResponse(responseCode = "400", description = "Não é possível desabilitar um lançamento pendentes")
     })
     public ResponseEntity<Void> deactivateCategory(
             @Parameter(description = "Category ID", required = true)
@@ -158,7 +158,7 @@ public class CategoryController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Category deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Category not found"),
-            @ApiResponse(responseCode = "400", description = "Cannot delete category with associated accounts")
+            @ApiResponse(responseCode = "400", description = "Não é possível deletar uma categoria vinculada a lançamentos")
     })
     public ResponseEntity<Void> deleteCategory(
             @Parameter(description = "Category ID", required = true)

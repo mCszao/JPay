@@ -13,11 +13,11 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:4200") // URL do app Angular
+                        .allowedOrigins("http://localhost:4200")
                         .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .exposedHeaders("*")
-                        .allowCredentials(true) // se usar cookies/Authorization header
+                        .allowCredentials(true)
                         .maxAge(3600);
             }
         };

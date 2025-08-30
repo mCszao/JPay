@@ -22,9 +22,9 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Long> 
     @Query("SELECT SUM(ba.currentBalance) FROM BankAccount ba WHERE ba.active = true")
     Optional<BigDecimal> sumCurrentBalanceByActiveTrue();
 
-    @Query("SELECT COUNT(a) FROM AccountPayable a WHERE a.bankAccount.id = :bankAccountId AND a.status = 'PENDING'")
-    long countPendingAccountsByBankAccount(@Param("bankAccountId") Long bankAccountId);
+    @Query("SELECT COUNT(a) FROM Transaction a WHERE a.bankAccount.id = :bankAccountId AND a.status = 'PENDING'")
+    long countPendingTransactionsByBankAccount(@Param("bankAccountId") Long bankAccountId);
 
-    @Query("SELECT COUNT(a) FROM AccountPayable a WHERE a.bankAccount.id = :bankAccountId")
-    long countAccountsByBankAccount(@Param("bankAccountId") Long bankAccountId);
+    @Query("SELECT COUNT(a) FROM Transaction a WHERE a.bankAccount.id = :bankAccountId")
+    long countTransactionsByBankAccount(@Param("bankAccountId") Long bankAccountId);
 }

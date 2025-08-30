@@ -78,8 +78,8 @@ public class GlobalCustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
-    @ExceptionHandler(AccountPayableNotFoundException.class)
-    public ResponseEntity<GlobalErrorResponse> handleCategoyNotFoundException(AccountPayableNotFoundException ex) {
+    @ExceptionHandler(TransactionNotFoundException.class)
+    public ResponseEntity<GlobalErrorResponse> handleCategoyNotFoundException(TransactionNotFoundException ex) {
         GlobalErrorResponse errorResponse = GlobalErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())

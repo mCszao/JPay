@@ -118,9 +118,9 @@ public class BankAccountService {
         BankAccount bankAccount = bankAccountRepository.findById(id)
                 .orElseThrow(() -> new BankAccountNotFoundException(id));
 
-        long pendingAccountsCount = bankAccountRepository.countPendingAccountsByBankAccount(id);
-        if (pendingAccountsCount > 0) {
-            throw new BusinessException("Não pode desativar a conta bancária, pois ela tem " + pendingAccountsCount + " contas pendentes");
+        long pendingTransactionsCount = bankAccountRepository.countPendingTransactionsByBankAccount(id);
+        if (pendingTransactionsCount > 0) {
+            throw new BusinessException("Não pode desativar a conta bancária, pois ela tem " + pendingTransactionsCount + " lançamentos pendentes");
         }
 
         bankAccount.setActive(!bankAccount.getActive());
@@ -135,10 +135,10 @@ public class BankAccountService {
         BankAccount bankAccount = bankAccountRepository.findById(id)
                 .orElseThrow(() -> new BankAccountNotFoundException(id));
 
-        long accountsCount = bankAccountRepository.countAccountsByBankAccount(id);
+        long transactionsCount = bankAccountRepository.countTransactionsByBankAccount(id);
 
-        if (accountsCount > 0) {
-            throw new BusinessException("Não é possível deletar a conta bancária pois ela possúi contas a pagar pendentes e/ou transaões vinculadas, tente desativar");
+        if (transactionsCount > 0) {
+            throw new BusinessException("Não é possível deletar a conta bancária pois ela possuí lançamentos pendentes e/ou transaões vinculadas, tente desativar");
         }
 
         bankAccountRepository.delete(bankAccount);
@@ -146,7 +146,6 @@ public class BankAccountService {
     }
 
     private BankAccountResponseDTO toResponseDTO(BankAccount bankAccount) {
-        Long accountCount = bankAccountRepository.countAccountsByBankAccount(bankAccount.getId());
 
         return BankAccountResponseDTO.builder()
                 .id(bankAccount.getId())

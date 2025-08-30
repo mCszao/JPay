@@ -1,11 +1,11 @@
 package com.challenge.JPay.config;
 
-import com.challenge.JPay.model.AccountPayable;
+import com.challenge.JPay.model.Transaction;
 import com.challenge.JPay.model.BankAccount;
 import com.challenge.JPay.model.Category;
 import com.challenge.JPay.model.enums.Status;
 import com.challenge.JPay.model.enums.TransactionType;
-import com.challenge.JPay.repository.AccountPayableRepository;
+import com.challenge.JPay.repository.TransactionRepository;
 import com.challenge.JPay.repository.BankAccountRepository;
 import com.challenge.JPay.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Slf4j
 @Component
@@ -24,7 +23,7 @@ public class DataLoader implements CommandLineRunner {
 
     private final CategoryRepository categoryRepository;
     private final BankAccountRepository bankAccountRepository;
-    private final AccountPayableRepository accountRepository;
+    private final TransactionRepository accountRepository;
 
     @Override
     public void run(String... args) {
@@ -103,7 +102,7 @@ public class DataLoader implements CommandLineRunner {
         // ========== CONTAS A PAGAR/RECEBER ==========
 
         // Contas PENDENTES (futuras)
-        accountRepository.save(AccountPayable.builder()
+        accountRepository.save(Transaction.builder()
                 .description("Conta de Luz - Agosto 2025")
                 .amount(new BigDecimal("145.80"))
                 .expirationDate(LocalDate.now().plusDays(10))
@@ -113,7 +112,7 @@ public class DataLoader implements CommandLineRunner {
                 .bankAccount(itau)
                 .build());
 
-        accountRepository.save(AccountPayable.builder()
+        accountRepository.save(Transaction.builder()
                 .description("Supermercado Extra")
                 .amount(new BigDecimal("320.50"))
                 .expirationDate(LocalDate.now().plusDays(5))
@@ -123,7 +122,7 @@ public class DataLoader implements CommandLineRunner {
                 .bankAccount(nubank)
                 .build());
 
-        accountRepository.save(AccountPayable.builder()
+        accountRepository.save(Transaction.builder()
                 .description("Plano de Saúde - Setembro")
                 .amount(new BigDecimal("450.00"))
                 .expirationDate(LocalDate.now().plusDays(15))
@@ -134,7 +133,7 @@ public class DataLoader implements CommandLineRunner {
                 .build());
 
         // Contas VENCIDAS (overdue)
-        accountRepository.save(AccountPayable.builder()
+        accountRepository.save(Transaction.builder()
                 .description("Combustível - Posto Shell")
                 .amount(new BigDecimal("180.00"))
                 .expirationDate(LocalDate.now().minusDays(3))
@@ -144,7 +143,7 @@ public class DataLoader implements CommandLineRunner {
                 .bankAccount(nubank)
                 .build());
 
-        accountRepository.save(AccountPayable.builder()
+        accountRepository.save(Transaction.builder()
                 .description("Conta de Água - Julho")
                 .amount(new BigDecimal("89.30"))
                 .expirationDate(LocalDate.now().minusDays(7))
@@ -155,7 +154,7 @@ public class DataLoader implements CommandLineRunner {
                 .build());
 
         // Contas PAGAS
-        accountRepository.save(AccountPayable.builder()
+        accountRepository.save(Transaction.builder()
                 .description("Conta de Luz - Julho 2025")
                 .amount(new BigDecimal("132.45"))
                 .expirationDate(LocalDate.now().minusDays(20))
@@ -166,7 +165,7 @@ public class DataLoader implements CommandLineRunner {
                 .bankAccount(itau)
                 .build());
 
-        accountRepository.save(AccountPayable.builder()
+        accountRepository.save(Transaction.builder()
                 .description("Farmácia - Medicamentos")
                 .amount(new BigDecimal("67.90"))
                 .expirationDate(LocalDate.now().minusDays(15))
@@ -177,7 +176,7 @@ public class DataLoader implements CommandLineRunner {
                 .bankAccount(nubank)
                 .build());
 
-        accountRepository.save(AccountPayable.builder()
+        accountRepository.save(Transaction.builder()
                 .description("Restaurante - Almoço Executivo")
                 .amount(new BigDecimal("45.00"))
                 .expirationDate(LocalDate.now().minusDays(10))
@@ -189,7 +188,7 @@ public class DataLoader implements CommandLineRunner {
                 .build());
 
         // Algumas contas de CRÉDITO (recebimentos)
-        accountRepository.save(AccountPayable.builder()
+        accountRepository.save(Transaction.builder()
                 .description("Reembolso Plano de Saúde")
                 .amount(new BigDecimal("200.00"))
                 .expirationDate(LocalDate.now().plusDays(2))
@@ -199,7 +198,7 @@ public class DataLoader implements CommandLineRunner {
                 .bankAccount(itau)
                 .build());
 
-        accountRepository.save(AccountPayable.builder()
+        accountRepository.save(Transaction.builder()
                 .description("Cashback Cartão de Crédito")
                 .amount(new BigDecimal("85.50"))
                 .expirationDate(LocalDate.now().minusDays(5))

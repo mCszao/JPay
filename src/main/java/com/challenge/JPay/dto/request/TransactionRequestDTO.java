@@ -1,13 +1,12 @@
 package com.challenge.JPay.dto.request;
 
-import com.challenge.JPay.model.enums.TransactionType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public record AccountPayableRequestDTO(
+public record TransactionRequestDTO(
     @NotBlank(message = "A descrição é obrigatória")
     @Size(max = 255, message = "A descrição não pode ter mais de 255 caracteres")
     String description,

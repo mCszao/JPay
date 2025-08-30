@@ -35,7 +35,7 @@ public class Category {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Builder.Default
-    private List<AccountPayable> accounts = new ArrayList<>();
+    private List<Transaction> transactions = new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

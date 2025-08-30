@@ -6,9 +6,8 @@ import com.challenge.JPay.dto.response.CategoryTotalsResponseDTO;
 import com.challenge.JPay.exception.BusinessException;
 import com.challenge.JPay.exception.CategoryNotFoundException;
 import com.challenge.JPay.exception.ResourceDuplicateException;
-import com.challenge.JPay.exception.ResourceNotFoundException;
 import com.challenge.JPay.model.Category;
-import com.challenge.JPay.repository.AccountPayableRepository;
+import com.challenge.JPay.repository.TransactionRepository;
 import com.challenge.JPay.repository.CategoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ public class CategoryService {
     @Autowired
     private CategoryRepository repository;
     @Autowired
-    private AccountPayableRepository accountPayableRepository;
+    private TransactionRepository transactionRepository;
 
     public Page<CategoryResponseDTO> findAll(Pageable pageable) {
         log.info("Finding all categories with pagination: {}", pageable);
@@ -39,7 +38,7 @@ public class CategoryService {
     public CategoryResponseDTO findMostUsedCategory() {
         log.info("Finding most used category");
 
-        if(accountPayableRepository.findAll().isEmpty()) {
+        if(transactionRepository.findAll().isEmpty()) {
             throw new BusinessException("Sem lançamentos cadastrados");
         }
         
@@ -121,9 +120,9 @@ public class CategoryService {
                 .orElseThrow(() -> new CategoryNotFoundException(id));
 
 
-        long pendingAccountsCount = repository.countPendingAccountsByCategory(id);
-        if (pendingAccountsCount > 0) {
-            throw new BusinessException("Não é possivel desativar a categoria pois ela possuí " + pendingAccountsCount + " contas pendentes");
+        long pendingTransactionsCount = repository.countPendingTransactionsByCategory(id);
+        if (pendingTransactionsCount > 0) {
+            throw new BusinessException("Não é possivel desativar a categoria pois ela possuí " + pendingTransactionsCount + " lançamentos pendentes");
         }
 
         category.setActive(!category.getActive());
@@ -138,9 +137,9 @@ public class CategoryService {
         Category category = repository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
 
-        long accountsCount = repository.countAccountsByCategory(id);
-        if (accountsCount > 0) {
-            throw new BusinessException("Não é possível deletar a categoria, pois ela possuí " + accountsCount + " contas a pagar associadas");
+        long transactionsCount = repository.countTransactionsByCategory(id);
+        if (transactionsCount > 0) {
+            throw new BusinessException("Não é possível deletar a categoria, pois ela possuí " + transactionsCount + " lançamentos associados");
         }
 
         repository.delete(category);

@@ -153,7 +153,7 @@ public class BankAccountController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Conta bancária desativada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Conta bancária não encontrada"),
-            @ApiResponse(responseCode = "400", description = "Não é possível desativar conta bancária com contas pendentes")
+            @ApiResponse(responseCode = "400", description = "Não é possível desativar conta bancária com lançamentos pendentes")
     })
     public ResponseEntity<Void> deactivateBankAccount(
             @Parameter(description = "ID da conta bancária", required = true)
@@ -169,7 +169,7 @@ public class BankAccountController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Conta bancária excluída com sucesso"),
             @ApiResponse(responseCode = "404", description = "Conta bancária não encontrada"),
-            @ApiResponse(responseCode = "400", description = "Não é possível excluir conta bancária com contas associadas")
+            @ApiResponse(responseCode = "400", description = "Não é possível excluir conta bancária vinculada a lançamentos")
     })
     public ResponseEntity<Void> deleteBankAccount(
             @Parameter(description = "ID da conta bancária", required = true)

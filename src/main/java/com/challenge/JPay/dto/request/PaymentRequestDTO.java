@@ -18,6 +18,6 @@ public record PaymentRequestDTO(
 
         @NotNull(message = "A conta é obrigatória")
         @Positive(message = "O id da conta a pagar é obrigatório")
-        Long accountPayableId
+        Long transactionId
 
 ) { }
